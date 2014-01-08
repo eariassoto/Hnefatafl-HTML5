@@ -1,32 +1,47 @@
 <!DOCTYPE html>
 <html>
-	<body id = "body">
-	</body>
+	<head>
+		<meta charset="UTF-8">
+	</head>
 	<script>
-		var colorearVentana = function(canvas){
+		
+		var JSONfile = new XMLHttpRequest();
+		JSONfile.open("GET", "settings.json", true);		
+		JSONfile.send()
+		console.log(JSONfile)
+		var settings = 	JSON.parse(JSONfile);
+		
+		var drawBase = function(ctx, margen, tamTablero){
+			ctx.fillStyle = settings.color.background;
+			ctx.fillRect(0, 0, tamTablero, margen);
+			ctx.fillStyle = settings.color.board;
+			ctx.fillRect(0, margen, tamTablero, tamTablero);
+			ctx.fillStyle = settings.color.background;
+			ctx.fillRect(0, margen+tamTablero, tamTablero, margen);
+		}
+		
+		var drawWindow = function(canvas){
 			var ctx = canvas.getContext('2d');
-			var margen = (canvas.height - canvas.width)/2
-			ctx.fillStyle = 'rgb(80, 48, 34)';
-			ctx.fillRect(0,0, canvas.width, margen);
-			ctx.fillStyle = 'rgb(75, 43, 29)';
-			ctx.fillRect(0, margen, canvas.width, canvas.width);
-			ctx.fillStyle = 'rgb(80, 48, 34)';
-			ctx.fillRect(0, margen+canvas.width, canvas.width, margen);
-
+			var margen = Math.round((canvas.height - canvas.width)/2);
+			var tamTablero = canvas.width;
+			drawBase(ctx, margen, tamTablero);	
 		} 
+			
+		
 		
 		var setup = function(){
 			var body = document.getElementById("body");
 			var canvas = document.createElement("canvas");
-			
+						
 			var h = 1024;
-			
 			canvas.height = h;
 			canvas.width =  (h*4)/5;
 			body.appendChild(canvas);
-			
-			colorearVentana(canvas);
+					
+			drawWindow(canvas, settings);
 		}
 		window.onload = setup;
 	</script>
+	<body id = "body">
+	</body>
 </html>
